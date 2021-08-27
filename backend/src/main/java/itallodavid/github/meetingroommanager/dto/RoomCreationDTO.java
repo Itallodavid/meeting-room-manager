@@ -3,10 +3,7 @@ package itallodavid.github.meetingroommanager.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
-import javax.validation.constraints.FutureOrPresent;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -21,9 +18,11 @@ public class RoomCreationDTO implements Serializable {
     @NotNull @FutureOrPresent @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate date;
 
-    @NotNull
+    @NotNull @FutureOrPresent @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
     private LocalTime startHour;
 
-    @NotNull
+    @NotNull @Future @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
     private LocalTime endHour;
+
+
 }
