@@ -1,6 +1,7 @@
 package itallodavid.github.meetingroommanager.service;
 
 import itallodavid.github.meetingroommanager.dto.RoomCreationDTO;
+import itallodavid.github.meetingroommanager.exception.RoomNotFoundException;
 import itallodavid.github.meetingroommanager.mapper.RoomMapper;
 import itallodavid.github.meetingroommanager.model.Room;
 import itallodavid.github.meetingroommanager.repository.RoomRepository;
@@ -15,9 +16,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Optional;
 
 import static itallodavid.github.meetingroommanager.utils.RoomUtils.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -69,5 +73,28 @@ class RoomServiceTest {
         // then
         Room actual = service.createRoom(roomCreationDTO);
         assertThat(actual).isEqualTo(expectedRoom);
+    }
+
+    @Test
+    void testGivenValidIdThenReturnARoomEntity() throws RoomNotFoundException {
+        // setup
+        final Room expectedRoom = createFakeRoomWithId();
+
+        // when
+        when(repository.findById(ROOM_ID)).thenReturn(Optional.of(expectedRoom));
+
+        // then
+        Room actual = service.getRoom(ROOM_ID);
+
+        assertEquals(expectedRoom, actual);
+    }
+
+    @Test
+    void testGivenInvalidIdThenThrowRoomNotFoundException() {
+        // when
+        when(repository.findById(ROOM_ID)).thenReturn(Optional.empty());
+
+        // then
+        assertThrows(RoomNotFoundException.class, () -> service.getRoom(ROOM_ID));
     }
 }

@@ -1,6 +1,7 @@
 package itallodavid.github.meetingroommanager.controller;
 
 import itallodavid.github.meetingroommanager.dto.RoomCreationDTO;
+import itallodavid.github.meetingroommanager.exception.RoomNotFoundException;
 import itallodavid.github.meetingroommanager.model.Room;
 import itallodavid.github.meetingroommanager.service.RoomService;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.UUID;
 
 @RestController @RequestMapping("/rooms")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -28,5 +30,10 @@ public class RoomController {
     @ResponseStatus(HttpStatus.CREATED)
     public Room createRoom(@RequestBody @Valid final RoomCreationDTO dto){
         return service.createRoom(dto);
+    }
+
+    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Room room(@PathVariable final UUID id) throws RoomNotFoundException {
+        return service.getRoom(id);
     }
 }
