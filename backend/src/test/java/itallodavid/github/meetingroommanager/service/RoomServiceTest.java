@@ -144,4 +144,31 @@ class RoomServiceTest {
         // then
         assertThrows(RoomNotFoundException.class, () -> service.updateRoom(ROOM_ID, roomCreationDTO));
     }
+
+    @Test
+    void testGivenValidIdToDeleteThenReturnDeletedRoomEntity() throws RoomNotFoundException {
+        // setup
+        final Room expectedRoom = createFakeRoomWithId();
+
+        // when
+        when(repository.findById(ROOM_ID)).thenReturn(Optional.of(expectedRoom));
+
+        // then
+        final Room actual = service.deleteRoom(ROOM_ID);
+
+        assertEquals(expectedRoom, actual);
+        assertEquals(expectedRoom.getDate(), actual.getDate());
+        assertEquals(expectedRoom.getName(), actual.getName());
+        assertEquals(expectedRoom.getStartHour(), actual.getStartHour());
+        assertEquals(expectedRoom.getEndHour(), actual.getEndHour());
+    }
+
+    @Test
+    void testGivenInvalidIdToDeleteThenThrowRoomNotFoundException() throws RoomNotFoundException {
+        // when
+        when(repository.findById(ROOM_ID)).thenReturn(Optional.empty());
+
+        // then
+        assertThrows(RoomNotFoundException.class, () -> service.deleteRoom(ROOM_ID));
+    }
 }

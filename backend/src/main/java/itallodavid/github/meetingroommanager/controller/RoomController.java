@@ -43,4 +43,9 @@ public class RoomController {
         throws RoomNotFoundException{
         return service.updateRoom(id, dto);
     }
+
+    @DeleteMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Room deleteRoom(@PathVariable final UUID id) throws RoomNotFoundException {
+        return service.deleteRoom(id);
+    }
 }

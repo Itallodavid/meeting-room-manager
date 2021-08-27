@@ -43,4 +43,11 @@ public class RoomService {
         roomToUpdate.setId(id);
         return repository.save(roomToUpdate);
     }
+
+    @Transactional
+    public Room deleteRoom(final UUID id) throws RoomNotFoundException {
+        Room room = this.getRoom(id);
+        repository.delete(room);
+        return room;
+    }
 }
