@@ -35,4 +35,12 @@ public class RoomService {
     public Room getRoom(final UUID id) throws RoomNotFoundException{
         return repository.findById(id).orElseThrow(() -> new RoomNotFoundException(id));
     }
+
+    @Transactional
+    public Room updateRoom(final UUID id, final RoomCreationDTO dto) throws RoomNotFoundException {
+        this.getRoom(id);
+        final Room roomToUpdate = mapper.toEntity(dto);
+        roomToUpdate.setId(id);
+        return repository.save(roomToUpdate);
+    }
 }

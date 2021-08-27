@@ -15,6 +15,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -96,5 +98,50 @@ class RoomServiceTest {
 
         // then
         assertThrows(RoomNotFoundException.class, () -> service.getRoom(ROOM_ID));
+    }
+
+    @Test
+    void testGivenValidIdToUpdateThenReturnUpdatedRoomEntity() throws RoomNotFoundException {
+        // setup
+        final Room mapperReturn = createFakeRoomWithoutId();
+
+        final Room findByIdReturn = Room.builder()
+            .id(ROOM_ID)
+            .name("random")
+            .date(LocalDate.now())
+            .endHour(LocalTime.now())
+            .startHour(LocalTime.now())
+            .build();
+
+        final Room expectedRoom = createFakeRoomWithId();
+
+        // given
+        final RoomCreationDTO roomCreationDTO = createFakeRoomCreationDTO();
+
+        // when
+        when(repository.findById(ROOM_ID)).thenReturn(Optional.of(findByIdReturn));
+        when(mapper.toEntity(roomCreationDTO)).thenReturn(mapperReturn);
+        when(repository.save(mapperReturn)).thenReturn(expectedRoom);
+
+        // then
+        final Room actual = service.updateRoom(ROOM_ID, roomCreationDTO);
+
+        assertEquals(expectedRoom, actual);
+        assertEquals(expectedRoom.getDate(), actual.getDate());
+        assertEquals(expectedRoom.getName(), actual.getName());
+        assertEquals(expectedRoom.getStartHour(), actual.getStartHour());
+        assertEquals(expectedRoom.getEndHour(), actual.getEndHour());
+    }
+
+    @Test
+    void testGivenInvalidIdToUpdateThenThrowRoomNotFoundException() {
+        // given
+        final RoomCreationDTO roomCreationDTO = createFakeRoomCreationDTO();
+
+        // when
+        when(repository.findById(ROOM_ID)).thenReturn(Optional.empty());
+
+        // then
+        assertThrows(RoomNotFoundException.class, () -> service.updateRoom(ROOM_ID, roomCreationDTO));
     }
 }

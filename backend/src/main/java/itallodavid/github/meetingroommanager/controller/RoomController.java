@@ -36,4 +36,11 @@ public class RoomController {
     public Room room(@PathVariable final UUID id) throws RoomNotFoundException {
         return service.getRoom(id);
     }
+
+    @PutMapping(path = "/{id}",
+        consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Room updateRoom(@PathVariable final UUID id, @RequestBody @Valid final RoomCreationDTO dto)
+        throws RoomNotFoundException{
+        return service.updateRoom(id, dto);
+    }
 }
