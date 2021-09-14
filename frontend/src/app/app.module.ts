@@ -1,20 +1,21 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { RoomListComponent } from './room-list/room-list.component';
-import { CreateRoomComponent } from './create-room/create-room.component';
+import { FormsModule } from '@angular/forms'
+import { AppRoutingModule } from './router/app-routing.module';
+import { AppComponent } from './components/app/app.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RoomCardComponent } from './components/room-card/room-card.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    RoomListComponent,
-    CreateRoomComponent
+    RoomCardComponent,
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
